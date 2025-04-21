@@ -1033,6 +1033,13 @@ module = {
 };
 
 module = {
+  name = testpci;
+  common = commands/testpci.c;
+
+  enable = pci;
+};
+
+module = {
   name = memrw;
   common = commands/memrw.c;
 };
