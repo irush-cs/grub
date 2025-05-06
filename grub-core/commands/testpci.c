@@ -49,7 +49,7 @@ grub_testpci_iter (grub_pci_device_t dev  __attribute__ ((unused)),
   for (int i = 0; i < devlist->n_devices; i++) {
     if (grub_strcasecmp(device, devlist->devices[i]) == 0) {
       grub_free(device);
-      devlist->found = GRUB_ERR_NONE;
+      devlist->found = true;
       return 1;
     }
   }
@@ -80,7 +80,7 @@ grub_cmd_testpci (grub_extcmd_context_t ctxt,
 
   struct grub_testpci_devlist devlist;
 
-  devlist.found = GRUB_ERR_TEST_FAILURE;
+  devlist.found = false;
   devlist.n_devices = 0;
   devlist.s_devices = argc + (ctxt->state[0].set ? 5 : 0);
   devlist.devices = grub_malloc(devlist.s_devices * sizeof(char*));
@@ -149,7 +149,7 @@ grub_cmd_testpci (grub_extcmd_context_t ctxt,
     grub_free(devlist.devices[i]);
   }
   grub_free(devlist.devices);
-  return devlist.found;
+  return devlist.found ? GRUB_ERR_NONE : GRUB_ERR_TEST_FAILURE;
 }
 
 static grub_extcmd_t cmd;
