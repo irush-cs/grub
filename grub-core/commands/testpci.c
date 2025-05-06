@@ -66,6 +66,9 @@ testpci_add_device_to_list(struct grub_testpci_devlist* devlist,
     devlist->s_devices *= 2;
     devlist->devices = grub_realloc(devlist->devices,
                                     devlist->s_devices * sizeof(char*));
+    if (!(devlist->devices)) {
+      return;
+    }
   }
   devlist->devices[devlist->n_devices++] = grub_strdup(device);
 }
@@ -81,9 +84,15 @@ grub_cmd_testpci (grub_extcmd_context_t ctxt,
   devlist.n_devices = 0;
   devlist.s_devices = argc + (ctxt->state[0].set ? 5 : 0);
   devlist.devices = grub_malloc(devlist.s_devices * sizeof(char*));
+  if (!(devlist.devices)) {
+    return GRUB_ERR_OUT_OF_MEMORY;
+  }
 
   for (int i = 0; i < argc; i++) {
     testpci_add_device_to_list(&devlist, args[i]);
+    if (!(devlist.devices)) {
+      return GRUB_ERR_OUT_OF_MEMORY;
+    }
   }
 
   /* device list from file */
@@ -119,6 +128,9 @@ grub_cmd_testpci (grub_extcmd_context_t ctxt,
         continue;
 
       testpci_add_device_to_list(&devlist, p);
+      if (!(devlist.devices)) {
+        return GRUB_ERR_OUT_OF_MEMORY;
+      }
 
     }
     grub_file_close (listfile);
