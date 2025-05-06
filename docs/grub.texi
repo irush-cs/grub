@@ -4139,6 +4139,7 @@ Modules can be loaded via the @command{insmod} (@pxref{insmod}) command.
 * test_module::
 * test_blockarg_module::
 * testload_module::
+* testpci_module::
 * testspeed_module::
 * tftp_module::
 * tga_module::
@@ -5727,6 +5728,12 @@ argument function in GRUB internal functions via a test command
 @section testload
 This module is intended for performing a functional test of some file reading /
 seeking functions in GRUB internals via a test command @command{testload}.
+
+@node testpci_module
+@section testpci
+This module provides support for the @command{testpci} command. This
+command can be used to test if specific PCI / PCIe devices are found on
+the system.
 
 @node testspeed_module
 @section testspeed
@@ -8498,6 +8505,7 @@ GRUB shell may provide more information on parameters and usage.
 @item @command{syslinux_source} - Execute syslinux config in same context
 @item @command{test_blockarg} - Print and execute block argument., 0
 @item @command{testload} - Load the same file in multiple ways.
+@item @command{testpci} - Test if a PCI device is present.
 @item @command{testspeed} - Test file read speed.
 @item @command{tgatest} - Tests loading of TGA bitmap.
 @item @command{time} - Measure time used by COMMAND
