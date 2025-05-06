@@ -99,43 +99,43 @@ grub_cmd_testpci (grub_extcmd_context_t ctxt,
   if (ctxt->state[0].set) {
 
     grub_file_t listfile = grub_file_open(ctxt->state[0].arg, GRUB_FILE_TYPE_NONE);
-    if (!listfile)
-      goto END_FILE;
+    if (listfile) {
 
-    char *buf = NULL;
-    while (grub_free (buf), (buf = grub_file_getline (listfile))) {
+      char *buf = NULL;
+      while (grub_free (buf), (buf = grub_file_getline (listfile))) {
 
-      /* remove comments */
-      char *p = grub_strchr(buf, '#');
-      if (p) {
-        *p = '\0';
+        /* remove comments */
+        char *p = grub_strchr(buf, '#');
+        if (p) {
+          *p = '\0';
+        }
+
+        /* remove suffix spaces */
+        p = buf + grub_strlen(buf) - 1;
+        while (p >= buf && *p && grub_isspace(*p)) {
+          *p-- = '\0';
+        }
+
+        /* remove prefix spaces */
+        p = buf;
+        while (*p && grub_isspace(*p)) {
+          p++;
+        }
+
+        /* ignore empty */
+        if (*p == '\0')
+          continue;
+
+        testpci_add_device_to_list(&devlist, p);
+        if (!(devlist.devices)) {
+          return GRUB_ERR_OUT_OF_MEMORY;
+        }
+
       }
 
-      /* remove suffix spaces */
-      p = buf + grub_strlen(buf) - 1;
-      while (p >= buf && *p && grub_isspace(*p)) {
-        *p-- = '\0';
-      }
-
-      /* remove prefix spaces */
-      p = buf;
-      while (*p && grub_isspace(*p)) {
-        p++;
-      }
-
-      /* ignore empty */
-      if (*p == '\0')
-        continue;
-
-      testpci_add_device_to_list(&devlist, p);
-      if (!(devlist.devices)) {
-        return GRUB_ERR_OUT_OF_MEMORY;
-      }
-
+      grub_file_close (listfile);
     }
-    grub_file_close (listfile);
   }
- END_FILE:
 
   for (int d = 0 ; d < devlist.n_devices; d++) {
     if (grub_strlen(devlist.devices[d]) != 9 || devlist.devices[d][4] != ':') {
