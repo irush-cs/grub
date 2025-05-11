@@ -32,9 +32,15 @@ static const struct grub_arg_option options[] = {
 };
 
 struct grub_testpci_devlist {
+  /* devices list */
   char** devices;
+
+  /* size of devices list */
+  int devices_size;
+
+  /* number of allocated devices in the list <= devices_size */
   int n_devices;
-  int s_devices;
+
   bool found;
 };
 
@@ -66,17 +72,17 @@ testpci_clear_device_list(struct grub_testpci_devlist* devlist)
   }
   grub_free(devlist->devices);
   devlist->n_devices = 0;
-  devlist->s_devices = 0;
+  devlist->devices_size = 0;
 }
 
 static grub_err_t
 testpci_add_device_to_list(struct grub_testpci_devlist* devlist,
                            char* device)
 {
-  if (devlist->n_devices == devlist->s_devices) {
-    devlist->s_devices *= 2;
+  if (devlist->n_devices == devlist->devices_size) {
+    devlist->devices_size *= 2;
     char** tmp = grub_realloc(devlist->devices,
-                              devlist->s_devices * sizeof(char*));
+                              devlist->devices_size * sizeof(char*));
     if (!tmp) {
       return grub_errno;
     }
@@ -99,8 +105,8 @@ grub_cmd_testpci (grub_extcmd_context_t ctxt,
 
   devlist.found = false;
   devlist.n_devices = 0;
-  devlist.s_devices = argc + (ctxt->state[0].set ? 5 : 0);
-  devlist.devices = grub_malloc(devlist.s_devices * sizeof(char*));
+  devlist.devices_size = argc + (ctxt->state[0].set ? 5 : 0);
+  devlist.devices = grub_malloc(devlist.devices_size * sizeof(char*));
   if (!(devlist.devices)) {
     return GRUB_ERR_OUT_OF_MEMORY;
   }
