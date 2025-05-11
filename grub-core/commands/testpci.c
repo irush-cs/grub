@@ -108,7 +108,7 @@ grub_cmd_testpci (grub_extcmd_context_t ctxt,
   devlist.devices_size = argc + (ctxt->state[0].set ? 5 : 0);
   devlist.devices = grub_malloc(devlist.devices_size * sizeof(char*));
   if (!(devlist.devices)) {
-    return GRUB_ERR_OUT_OF_MEMORY;
+    return grub_errno;
   }
 
   for (int i = 0; i < argc; i++) {
@@ -158,12 +158,16 @@ grub_cmd_testpci (grub_extcmd_context_t ctxt,
       }
 
       grub_file_close (listfile);
+    } else {
+      return grub_errno;
     }
   }
 
   for (int d = 0 ; d < devlist.n_devices; d++) {
     if (grub_strlen(devlist.devices[d]) != 9 || devlist.devices[d][4] != ':') {
-      grub_printf("bad input device (%d) \"%s\", expected xxxx:xxxx\n", d, devlist.devices[d]);
+      grub_printf("invalid device (%d) \"%s\", expected xxxx:xxxx\n", d, devlist.devices[d]);
+      testpci_clear_device_list(&devlist);
+      return grub_error(GRUB_ERR_BAD_ARGUMENT, "invalid device");
     }
   }
 
@@ -171,7 +175,8 @@ grub_cmd_testpci (grub_extcmd_context_t ctxt,
 
   testpci_clear_device_list(&devlist);
 
-  return devlist.found ? GRUB_ERR_NONE : GRUB_ERR_TEST_FAILURE;
+  return devlist.found ?
+    GRUB_ERR_NONE : grub_error(GRUB_ERR_TEST_FAILURE, "device not found");
 }
 
 static grub_extcmd_t cmd;
