@@ -50,17 +50,17 @@ grub_testpci_iter (grub_pci_device_t dev  __attribute__ ((unused)),
                    void *data) {
 
   struct grub_testpci_devlist* devlist = (struct grub_testpci_devlist*)data;
+  char device[10];
 
-  char* device = grub_xasprintf ("%04x:%04x", pciid & 0xFFFF, pciid >> 16);
+  grub_snprintf(device, sizeof(device),
+                "%04x:%04x", pciid & 0xFFFF, pciid >> 16);
   for (int i = 0; i < devlist->n_devices; i++) {
     if (grub_strcasecmp(device, devlist->devices[i]) == 0) {
-      grub_free(device);
       devlist->found = true;
       return 1;
     }
   }
 
-  grub_free(device);
   return 0;
 }
 
