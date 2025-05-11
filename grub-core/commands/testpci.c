@@ -27,7 +27,7 @@
 GRUB_MOD_LICENSE ("GPLv3+");
 
 static const struct grub_arg_option options[] = {
-  {"file", 0, 0, "read device list from file", "FILE", ARG_TYPE_STRING},
+  {"file", 'f', 0, "read device list from file", "FILE", ARG_TYPE_STRING},
   {0, 0, 0, 0, 0, 0}
 };
 
