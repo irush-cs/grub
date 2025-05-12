@@ -8059,6 +8059,38 @@ either @var{expression1} or @var{expression2} is true
 @end table
 @end deffn
 
+@node testpci
+@subsection testpci
+
+@deffn Command testpci [@option{--file} device.lst] [@var{device} [...]]
+Test if a PCI device is present.
+
+Gets a device list to check from command line arguments, and/or from the
+@var{device.lst} file.
+
+If any of the devices in the list are present on the machine - the
+command exits with zero status.
+
+If the list is empty; Or non of the devices in the list are present; Or
+any error occurred (bad device format, missing file, memory, etc.) - a
+non-zero exit code is returned.
+
+Each @var{device} should be in the format @code{xxxx:yyyy}, where
+@code{xxxx} is the vendor id, and @code{yyyy} is the device id. All
+lower case as appear in the output of the @command{lspci} command.
+
+If @var{device.lst} file is given, each line should contain a single
+@var{device}. Space padding, comments starting with #, and empty lines
+are ignored.
+
+For example:
+@example
+if testpci --file $prefix/device.lst 10de:233b 1002:74a5; then
+   set somevar=somevalue
+fi
+@end example
+@end deffn
+
 @node tpm2_key_protector_init
 @subsection tpm2_key_protector_init
 
@@ -8505,7 +8537,6 @@ GRUB shell may provide more information on parameters and usage.
 @item @command{syslinux_source} - Execute syslinux config in same context
 @item @command{test_blockarg} - Print and execute block argument., 0
 @item @command{testload} - Load the same file in multiple ways.
-@item @command{testpci} - Test if a PCI device is present.
 @item @command{testspeed} - Test file read speed.
 @item @command{tgatest} - Tests loading of TGA bitmap.
 @item @command{time} - Measure time used by COMMAND
