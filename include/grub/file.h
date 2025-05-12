@@ -126,6 +126,8 @@ enum grub_file_type
     GRUB_FILE_TYPE_FS_SEARCH,
     GRUB_FILE_TYPE_AUDIO,
     GRUB_FILE_TYPE_VBE_DUMP,
+    /* device list for testpci command */
+    GRUB_FILE_TYPE_DEVICE_LIST,
 
     GRUB_FILE_TYPE_LOADENV,
     GRUB_FILE_TYPE_SAVEENV,

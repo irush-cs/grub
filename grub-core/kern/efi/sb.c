@@ -168,6 +168,7 @@ shim_lock_verifier_init (grub_file_t io __attribute__ ((unused)),
     case GRUB_FILE_TYPE_THEME:
     case GRUB_FILE_TYPE_GETTEXT_CATALOG:
     case GRUB_FILE_TYPE_FS_SEARCH:
+    case GRUB_FILE_TYPE_DEVICE_LIST:
     case GRUB_FILE_TYPE_LOADENV:
     case GRUB_FILE_TYPE_SAVEENV:
     case GRUB_FILE_TYPE_VERIFY_SIGNATURE:

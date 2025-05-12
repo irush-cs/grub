@@ -122,7 +122,7 @@ grub_cmd_testpci (grub_extcmd_context_t ctxt,
   /* device list from file */
   if (ctxt->state[0].set) {
 
-    grub_file_t listfile = grub_file_open(ctxt->state[0].arg, GRUB_FILE_TYPE_NONE);
+    grub_file_t listfile = grub_file_open(ctxt->state[0].arg, GRUB_FILE_TYPE_DEVICE_LIST);
     if (listfile) {
 
       char *buf = NULL;
